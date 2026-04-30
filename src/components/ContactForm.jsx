@@ -12,6 +12,9 @@ import {
 } from "lucide-react";
 import { openWhatsApp } from "../lib/whatsapp";
 
+const MAKE_WEBHOOK_URL =
+    "https://hook.eu1.make.com/7d9wgzbmo9qjqmptnf2rof6h7k8c";
+
 const SECTORS = [
     "Clínica Dentária",
     "Clínica Estética",
@@ -79,20 +82,41 @@ export default function ContactForm() {
 
         setSubmitting(true);
 
-        openWhatsApp({
-            template: "agency",
-            name: form.name,
-            email: form.email,
-            niche: form.sector,
-            city: form.city,
-        });
+        try {
+            await fetch(MAKE_WEBHOOK_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: form.name,
+                    email: form.email,
+                    city: form.city,
+                    sector: form.sector,
+                    source: "geraclientes-form",
+                    submittedAt: new Date().toISOString(),
+                }),
+            });
 
-        setSubmitting(false);
-        setSubmitted(true);
+            openWhatsApp({
+                template: "agency",
+                name: form.name,
+                email: form.email,
+                niche: form.sector,
+                city: form.city,
+            });
 
-        toast.success(
-            "Pedido enviado com sucesso. Se quiseres acelerar, fala connosco no WhatsApp."
-        );
+            setSubmitted(true);
+
+            toast.success(
+                "Pedido enviado com sucesso. Se quiseres acelerar, fala connosco no WhatsApp."
+            );
+        } catch (error) {
+            console.error("Erro ao enviar lead para Make:", error);
+            toast.error("Erro ao enviar pedido. Tenta novamente.");
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const resetForm = () => {
@@ -182,8 +206,8 @@ export default function ContactForm() {
                                             <div key={s.id} className="flex items-center gap-2">
                                                 <div
                                                     className={`w-6 h-6 rounded-full text-[11px] font-semibold flex items-center justify-center transition-all duration-200 ${isDone || isActive
-                                                        ? "bg-[#2563EB] text-white"
-                                                        : "bg-[#E2E8F0] text-[#94A3B8]"
+                                                            ? "bg-[#2563EB] text-white"
+                                                            : "bg-[#E2E8F0] text-[#94A3B8]"
                                                         }`}
                                                 >
                                                     {isDone ? (

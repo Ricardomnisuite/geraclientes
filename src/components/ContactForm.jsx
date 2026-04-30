@@ -13,7 +13,7 @@ import {
 import { openWhatsApp } from "../lib/whatsapp";
 
 const MAKE_WEBHOOK_URL =
-    "https://hook.eu1.make.com/7d9wgzbmo9qjqmptnf2rof6h7k8c";
+    "https://hook.eu1.make.com/7d9wgzbmo9qjqmptnf2rof6h7k8q2s4m";
 
 const SECTORS = [
     "Clínica Dentária",

@@ -11,7 +11,6 @@ import {
     RotateCcw,
 } from "lucide-react";
 import { openWhatsApp } from "../lib/whatsapp";
-import { buildLeadData, handleLeadSubmission } from "../lib/leads";
 
 const SECTORS = [
     "Clínica Dentária",
@@ -77,25 +76,23 @@ export default function ContactForm() {
             toast.error(err);
             return;
         }
-        setSubmitting(true);
-        const leadData = buildLeadData({
-            name: form.name.trim(),
-            email: form.email.trim(),
-            city: form.city.trim(),
-            sector: form.sector,
-            source: "landing_page",
-        });
-        const result = await handleLeadSubmission(leadData);
-        setSubmitting(false);
 
-        if (result.success) {
-            setSubmitted(true);
-            toast.success("Pedido recebido. Já temos os teus dados.");
-        } else {
-            toast.error(
-                "Ocorreu um erro ao enviar. Tenta novamente ou usa o WhatsApp."
-            );
-        }
+        setSubmitting(true);
+
+        openWhatsApp({
+            template: "agency",
+            name: form.name,
+            email: form.email,
+            niche: form.sector,
+            city: form.city,
+        });
+
+        setSubmitting(false);
+        setSubmitted(true);
+
+        toast.success(
+            "Pedido enviado com sucesso. Se quiseres acelerar, fala connosco no WhatsApp."
+        );
     };
 
     const resetForm = () => {
@@ -114,7 +111,6 @@ export default function ContactForm() {
         >
             <div className="max-w-6xl mx-auto px-4 md:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 md:gap-16 items-start">
-                    {/* Left: intro */}
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -168,7 +164,6 @@ export default function ContactForm() {
                         </button>
                     </motion.div>
 
-                    {/* Right: multi-step form */}
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -177,7 +172,6 @@ export default function ContactForm() {
                         className="lg:col-span-3 bg-white rounded-2xl border border-[#E2E8F0] p-6 md:p-8 shadow-sm"
                         data-testid="contact-form"
                     >
-                        {/* Progress */}
                         {!submitted && (
                             <div className="mb-6">
                                 <div className="flex items-center justify-between mb-3">
@@ -185,35 +179,22 @@ export default function ContactForm() {
                                         const isDone = step > s.id;
                                         const isActive = step === s.id;
                                         return (
-                                            <div
-                                                key={s.id}
-                                                className="flex items-center gap-2"
-                                                data-testid={`form-step-indicator-${s.id}`}
-                                            >
+                                            <div key={s.id} className="flex items-center gap-2">
                                                 <div
-                                                    className={`w-6 h-6 rounded-full text-[11px] font-semibold flex items-center justify-center transition-all duration-200 ${
-                                                        isDone
-                                                            ? "bg-[#2563EB] text-white"
-                                                            : isActive
-                                                            ? "bg-[#2563EB] text-white"
-                                                            : "bg-[#E2E8F0] text-[#94A3B8]"
-                                                    }`}
+                                                    className={`w-6 h-6 rounded-full text-[11px] font-semibold flex items-center justify-center transition-all duration-200 ${isDone || isActive
+                                                        ? "bg-[#2563EB] text-white"
+                                                        : "bg-[#E2E8F0] text-[#94A3B8]"
+                                                        }`}
                                                 >
                                                     {isDone ? (
-                                                        <Check
-                                                            className="w-3.5 h-3.5"
-                                                            strokeWidth={3}
-                                                        />
+                                                        <Check className="w-3.5 h-3.5" strokeWidth={3} />
                                                     ) : (
                                                         s.id
                                                     )}
                                                 </div>
                                                 <span
-                                                    className={`hidden sm:inline text-xs font-medium ${
-                                                        isActive
-                                                            ? "text-[#0A0A0A]"
-                                                            : "text-[#64748B]"
-                                                    }`}
+                                                    className={`hidden sm:inline text-xs font-medium ${isActive ? "text-[#0A0A0A]" : "text-[#64748B]"
+                                                        }`}
                                                 >
                                                     {s.label}
                                                 </span>
@@ -230,37 +211,27 @@ export default function ContactForm() {
                                         initial={false}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 0.3 }}
-                                        data-testid="form-progress-bar"
                                     />
                                 </div>
                             </div>
                         )}
 
-                        {/* Submitted state */}
                         {submitted ? (
                             <motion.div
                                 initial={{ opacity: 0, y: 12 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.35 }}
                                 className="py-6 text-center"
-                                data-testid="contact-success"
                             >
                                 <div className="w-14 h-14 rounded-full bg-[#2563EB]/10 text-[#2563EB] flex items-center justify-center mx-auto">
                                     <Check className="w-7 h-7" strokeWidth={2.5} />
                                 </div>
-                                <h3
-                                    className="mt-5 text-2xl font-bold text-[#0A0A0A] tracking-tight"
-                                    data-testid="contact-success-title"
-                                >
+                                <h3 className="mt-5 text-2xl font-bold text-[#0A0A0A] tracking-tight">
                                     Pedido recebido
                                 </h3>
-                                <p
-                                    className="mt-3 text-[15px] text-[#475569] max-w-md mx-auto leading-relaxed"
-                                    data-testid="contact-success-message"
-                                >
-                                    Obrigado, <strong>{form.name.split(" ")[0]}</strong>. Já
-                                    temos os teus dados. Se quiseres acelerar, fala connosco no
-                                    WhatsApp.
+                                <p className="mt-3 text-[15px] text-[#475569] max-w-md mx-auto leading-relaxed">
+                                    Obrigado, <strong>{form.name.split(" ")[0]}</strong>. Já temos
+                                    os teus dados. Se quiseres acelerar, fala connosco no WhatsApp.
                                 </p>
 
                                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -275,18 +246,12 @@ export default function ContactForm() {
                                                 city: form.city,
                                             })
                                         }
-                                        data-testid="contact-success-whatsapp"
                                         className="btn btn-whatsapp btn-lg"
                                     >
                                         <MessageCircle className="w-4 h-4" />
                                         Falar no WhatsApp
                                     </button>
-                                    <button
-                                        type="button"
-                                        onClick={resetForm}
-                                        data-testid="contact-reset-button"
-                                        className="btn btn-ghost"
-                                    >
+                                    <button type="button" onClick={resetForm} className="btn btn-ghost">
                                         <RotateCcw className="w-4 h-4" />
                                         Começar de novo
                                     </button>
@@ -302,7 +267,6 @@ export default function ContactForm() {
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -12 }}
                                             transition={{ duration: 0.25 }}
-                                            data-testid="form-step-1"
                                         >
                                             <div className="text-xs font-semibold text-[#64748B] uppercase tracking-widest">
                                                 Passo 1 de 3
@@ -316,7 +280,6 @@ export default function ContactForm() {
                                                     name="name"
                                                     value={form.name}
                                                     onChange={onChange}
-                                                    testid="contact-name"
                                                     placeholder="O teu nome"
                                                 />
                                                 <Field
@@ -325,12 +288,12 @@ export default function ContactForm() {
                                                     type="email"
                                                     value={form.email}
                                                     onChange={onChange}
-                                                    testid="contact-email"
                                                     placeholder="[email protected]"
                                                 />
                                             </div>
                                         </motion.div>
                                     )}
+
                                     {step === 2 && (
                                         <motion.div
                                             key="step-2"
@@ -338,7 +301,6 @@ export default function ContactForm() {
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -12 }}
                                             transition={{ duration: 0.25 }}
-                                            data-testid="form-step-2"
                                         >
                                             <div className="text-xs font-semibold text-[#64748B] uppercase tracking-widest">
                                                 Passo 2 de 3
@@ -352,7 +314,6 @@ export default function ContactForm() {
                                                     name="city"
                                                     value={form.city}
                                                     onChange={onChange}
-                                                    testid="contact-city"
                                                     placeholder="Ex: Lisboa"
                                                 />
                                                 <SelectField
@@ -360,18 +321,15 @@ export default function ContactForm() {
                                                     name="sector"
                                                     value={form.sector}
                                                     onChange={onChange}
-                                                    testid="contact-niche"
                                                     options={[
                                                         { value: "", label: "Escolhe um setor…" },
-                                                        ...SECTORS.map((s) => ({
-                                                            value: s,
-                                                            label: s,
-                                                        })),
+                                                        ...SECTORS.map((s) => ({ value: s, label: s })),
                                                     ]}
                                                 />
                                             </div>
                                         </motion.div>
                                     )}
+
                                     {step === 3 && (
                                         <motion.div
                                             key="step-3"
@@ -379,7 +337,6 @@ export default function ContactForm() {
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -12 }}
                                             transition={{ duration: 0.25 }}
-                                            data-testid="form-step-3"
                                         >
                                             <div className="text-xs font-semibold text-[#64748B] uppercase tracking-widest">
                                                 Passo 3 de 3
@@ -401,13 +358,11 @@ export default function ContactForm() {
                                     )}
                                 </AnimatePresence>
 
-                                {/* Actions */}
                                 <div className="mt-8 flex items-center justify-between gap-3">
                                     {step > 1 ? (
                                         <button
                                             type="button"
                                             onClick={back}
-                                            data-testid="form-back-button"
                                             className="inline-flex items-center gap-2 text-sm font-medium text-[#475569] hover:text-[#2563EB] transition-colors"
                                         >
                                             <ArrowLeft className="w-4 h-4" />
@@ -416,13 +371,9 @@ export default function ContactForm() {
                                     ) : (
                                         <span />
                                     )}
+
                                     {step < 3 ? (
-                                        <button
-                                            type="button"
-                                            onClick={next}
-                                            data-testid="form-next-button"
-                                            className="btn btn-primary"
-                                        >
+                                        <button type="button" onClick={next} className="btn btn-primary">
                                             Continuar
                                             <ArrowRight className="w-4 h-4" />
                                         </button>
@@ -431,7 +382,6 @@ export default function ContactForm() {
                                             type="button"
                                             onClick={onSubmit}
                                             disabled={submitting}
-                                            data-testid="contact-submit-button"
                                             className="btn btn-primary btn-lg"
                                         >
                                             {submitting ? (
@@ -457,7 +407,7 @@ export default function ContactForm() {
     );
 }
 
-function Field({ label, name, value, onChange, type = "text", placeholder, testid }) {
+function Field({ label, name, value, onChange, type = "text", placeholder }) {
     return (
         <div>
             <label className="block text-xs font-medium text-[#475569] mb-1.5">
@@ -469,14 +419,13 @@ function Field({ label, name, value, onChange, type = "text", placeholder, testi
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                data-testid={testid}
                 className="w-full rounded-lg border border-[#E2E8F0] bg-white px-3.5 py-2.5 text-sm text-[#0A0A0A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors"
             />
         </div>
     );
 }
 
-function SelectField({ label, name, value, onChange, options, testid }) {
+function SelectField({ label, name, value, onChange, options }) {
     return (
         <div>
             <label className="block text-xs font-medium text-[#475569] mb-1.5">
@@ -486,7 +435,6 @@ function SelectField({ label, name, value, onChange, options, testid }) {
                 name={name}
                 value={value}
                 onChange={onChange}
-                data-testid={testid}
                 className="w-full rounded-lg border border-[#E2E8F0] bg-white px-3.5 py-2.5 text-sm text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors"
             >
                 {options.map((opt) => (

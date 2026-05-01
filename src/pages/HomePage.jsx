@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import BeforeAfterChart from "../components/BeforeAfterChart";
 import Results from "../components/Results";
+import SimuladorCrescimentoClientes from "../components/SimuladorCrescimentoClientes";
 import GoogleAdsPlans from "../components/GoogleAdsPlans";
 import IndependentServices from "../components/IndependentServices";
 import WhyUs from "../components/WhyUs";
@@ -53,6 +54,7 @@ export default function HomePage() {
                 <Hero />
                 <BeforeAfterChart />
                 <Results />
+                <SimuladorCrescimentoClientes />
                 <GoogleAdsPlans />
                 <IndependentServices />
                 <WhyUs />

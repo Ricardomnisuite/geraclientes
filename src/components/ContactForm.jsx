@@ -49,31 +49,37 @@ export default function ContactForm() {
     const validateStep = (s) => {
         if (s === 1) {
             if (!form.name.trim()) return "Indica o teu nome.";
-            if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email))
+            if (!form.email.trim() || !/^\S+@\S+\.\S+$/.test(form.email)) {
                 return "Email inválido.";
+            }
         }
+
         if (s === 2) {
             if (!form.city.trim()) return "Indica a tua cidade.";
             if (!form.sector) return "Escolhe um setor.";
         }
+
         return null;
     };
 
     const next = () => {
         const err = validateStep(step);
+
         if (err) {
             toast.error(err);
             return;
         }
+
         setStep((s) => Math.min(3, s + 1));
     };
 
     const back = () => setStep((s) => Math.max(1, s - 1));
 
     const onSubmit = async () => {
-        alert("SUBMIT DISPAROU");
+        console.log("SUBMIT START");
 
         const err = validateStep(1) || validateStep(2);
+
         if (err) {
             toast.error(err);
             return;
@@ -82,7 +88,9 @@ export default function ContactForm() {
         setSubmitting(true);
 
         try {
-            await fetch("/api/lead", {
+            console.log("ANTES DO FETCH");
+
+            const res = await fetch("/api/lead", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -97,6 +105,14 @@ export default function ContactForm() {
                 }),
             });
 
+            console.log("DEPOIS DO FETCH", res.status);
+
+            if (!res.ok) {
+                throw new Error(`API ERROR ${res.status}`);
+            }
+
+            setSubmitted(true);
+
             openWhatsApp({
                 template: "agency",
                 name: form.name,
@@ -105,13 +121,11 @@ export default function ContactForm() {
                 city: form.city,
             });
 
-            setSubmitted(true);
-
             toast.success(
                 "Pedido enviado com sucesso. Se quiseres acelerar, fala connosco no WhatsApp."
             );
         } catch (error) {
-            console.error("Erro ao enviar lead para Make:", error);
+            console.error("ERRO REAL:", error);
             toast.error("Erro ao enviar pedido. Tenta novamente.");
         } finally {
             setSubmitting(false);
@@ -145,9 +159,11 @@ export default function ContactForm() {
                             <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2.5} />
                             Contacto direto
                         </div>
+
                         <h2 className="text-3xl sm:text-4xl font-bold text-[#0A0A0A] tracking-tighter-2 leading-[1.1]">
                             Vamos verificar se a tua zona está disponível
                         </h2>
+
                         <p className="mt-4 text-base text-[#64748B] leading-relaxed">
                             Trabalhamos apenas com 1 cliente por zona e setor para garantir
                             resultados. Responde em 3 passos rápidos.
@@ -201,12 +217,13 @@ export default function ContactForm() {
                                     {STEPS.map((s, i) => {
                                         const isDone = step > s.id;
                                         const isActive = step === s.id;
+
                                         return (
                                             <div key={s.id} className="flex items-center gap-2">
                                                 <div
                                                     className={`w-6 h-6 rounded-full text-[11px] font-semibold flex items-center justify-center transition-all duration-200 ${isDone || isActive
-                                                        ? "bg-[#2563EB] text-white"
-                                                        : "bg-[#E2E8F0] text-[#94A3B8]"
+                                                            ? "bg-[#2563EB] text-white"
+                                                            : "bg-[#E2E8F0] text-[#94A3B8]"
                                                         }`}
                                                 >
                                                     {isDone ? (
@@ -215,12 +232,14 @@ export default function ContactForm() {
                                                         s.id
                                                     )}
                                                 </div>
+
                                                 <span
                                                     className={`hidden sm:inline text-xs font-medium ${isActive ? "text-[#0A0A0A]" : "text-[#64748B]"
                                                         }`}
                                                 >
                                                     {s.label}
                                                 </span>
+
                                                 {i < STEPS.length - 1 && (
                                                     <div className="hidden sm:block ml-2 w-8 h-px bg-[#E2E8F0]" />
                                                 )}
@@ -228,6 +247,7 @@ export default function ContactForm() {
                                         );
                                     })}
                                 </div>
+
                                 <div className="h-1 rounded-full bg-[#E2E8F0] overflow-hidden">
                                     <motion.div
                                         className="h-full bg-[#2563EB]"
@@ -249,9 +269,11 @@ export default function ContactForm() {
                                 <div className="w-14 h-14 rounded-full bg-[#2563EB]/10 text-[#2563EB] flex items-center justify-center mx-auto">
                                     <Check className="w-7 h-7" strokeWidth={2.5} />
                                 </div>
+
                                 <h3 className="mt-5 text-2xl font-bold text-[#0A0A0A] tracking-tight">
                                     Pedido recebido
                                 </h3>
+
                                 <p className="mt-3 text-[15px] text-[#475569] max-w-md mx-auto leading-relaxed">
                                     Obrigado, <strong>{form.name.split(" ")[0]}</strong>. Já temos
                                     os teus dados. Se quiseres acelerar, fala connosco no WhatsApp.
@@ -274,6 +296,7 @@ export default function ContactForm() {
                                         <MessageCircle className="w-4 h-4" />
                                         Falar no WhatsApp
                                     </button>
+
                                     <button type="button" onClick={resetForm} className="btn btn-ghost">
                                         <RotateCcw className="w-4 h-4" />
                                         Começar de novo
@@ -294,9 +317,11 @@ export default function ContactForm() {
                                             <div className="text-xs font-semibold text-[#64748B] uppercase tracking-widest">
                                                 Passo 1 de 3
                                             </div>
+
                                             <h3 className="mt-1 text-xl font-bold text-[#0A0A0A] tracking-tight">
                                                 Como te chamas?
                                             </h3>
+
                                             <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <Field
                                                     label="Nome *"
@@ -305,6 +330,7 @@ export default function ContactForm() {
                                                     onChange={onChange}
                                                     placeholder="O teu nome"
                                                 />
+
                                                 <Field
                                                     label="Email *"
                                                     name="email"
@@ -328,9 +354,11 @@ export default function ContactForm() {
                                             <div className="text-xs font-semibold text-[#64748B] uppercase tracking-widest">
                                                 Passo 2 de 3
                                             </div>
+
                                             <h3 className="mt-1 text-xl font-bold text-[#0A0A0A] tracking-tight">
                                                 Conta-nos sobre o teu negócio
                                             </h3>
+
                                             <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <Field
                                                     label="Cidade *"
@@ -339,6 +367,7 @@ export default function ContactForm() {
                                                     onChange={onChange}
                                                     placeholder="Ex: Lisboa"
                                                 />
+
                                                 <SelectField
                                                     label="Setor *"
                                                     name="sector"
@@ -364,15 +393,18 @@ export default function ContactForm() {
                                             <div className="text-xs font-semibold text-[#64748B] uppercase tracking-widest">
                                                 Passo 3 de 3
                                             </div>
+
                                             <h3 className="mt-1 text-xl font-bold text-[#0A0A0A] tracking-tight">
                                                 Tudo pronto. Confirma e envia.
                                             </h3>
+
                                             <dl className="mt-5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] divide-y divide-[#E2E8F0]">
                                                 <SummaryRow label="Nome" value={form.name} />
                                                 <SummaryRow label="Email" value={form.email} />
                                                 <SummaryRow label="Cidade" value={form.city} />
                                                 <SummaryRow label="Setor" value={form.sector} />
                                             </dl>
+
                                             <p className="mt-4 text-xs text-[#64748B]">
                                                 Ao enviar aceitas ser contactado pela GeraClientes
                                                 sobre o teu pedido.
@@ -436,6 +468,7 @@ function Field({ label, name, value, onChange, type = "text", placeholder }) {
             <label className="block text-xs font-medium text-[#475569] mb-1.5">
                 {label}
             </label>
+
             <input
                 type={type}
                 name={name}
@@ -454,6 +487,7 @@ function SelectField({ label, name, value, onChange, options }) {
             <label className="block text-xs font-medium text-[#475569] mb-1.5">
                 {label}
             </label>
+
             <select
                 name={name}
                 value={value}
@@ -476,6 +510,7 @@ function SummaryRow({ label, value }) {
             <dt className="text-xs font-medium text-[#64748B] uppercase tracking-widest">
                 {label}
             </dt>
+
             <dd className="text-sm font-medium text-[#0A0A0A] text-right">
                 {value || <span className="text-[#94A3B8]">—</span>}
             </dd>

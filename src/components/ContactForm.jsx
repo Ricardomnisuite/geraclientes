@@ -76,8 +76,6 @@ export default function ContactForm() {
     const back = () => setStep((s) => Math.max(1, s - 1));
 
     const onSubmit = async () => {
-        console.log("SUBMIT START");
-
         const err = validateStep(1) || validateStep(2);
 
         if (err) {
@@ -88,8 +86,6 @@ export default function ContactForm() {
         setSubmitting(true);
 
         try {
-            console.log("ANTES DO FETCH");
-
             const res = await fetch("/api/lead", {
                 method: "POST",
                 headers: {
@@ -105,27 +101,17 @@ export default function ContactForm() {
                 }),
             });
 
-            console.log("DEPOIS DO FETCH", res.status);
-
             if (!res.ok) {
                 throw new Error(`API ERROR ${res.status}`);
             }
 
             setSubmitted(true);
 
-            openWhatsApp({
-                template: "agency",
-                name: form.name,
-                email: form.email,
-                niche: form.sector,
-                city: form.city,
-            });
-
             toast.success(
-                "Pedido enviado com sucesso. Se quiseres acelerar, fala connosco no WhatsApp."
+                "Pedido recebido com sucesso. Se quiseres acelerar, fala connosco no WhatsApp."
             );
         } catch (error) {
-            console.error("ERRO REAL:", error);
+            console.error("Lead submission error:", error);
             toast.error("Erro ao enviar pedido. Tenta novamente.");
         } finally {
             setSubmitting(false);

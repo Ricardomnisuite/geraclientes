@@ -92,7 +92,7 @@ export default function Results() {
         <section
             id="resultados"
             data-testid="results-section"
-            className="relative py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E2E8F0]"
+            className="relative py-16 md:py-20 bg-[#F8FAFC] border-y border-[#E2E8F0]"
         >
             <div className="max-w-7xl mx-auto px-4 md:px-8">
                 <motion.div

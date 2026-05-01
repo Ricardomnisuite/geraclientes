@@ -15,7 +15,7 @@ export default function BeforeAfterChart() {
         <section
             id="impacto"
             data-testid="chart-section"
-            className="relative pt-6 pb-20 md:pt-10 md:pb-24"
+            className="relative pt-2 pb-20 md:pt-4 md:pb-24"
         >
             <div className="max-w-5xl mx-auto px-4 md:px-8">
                 <motion.div

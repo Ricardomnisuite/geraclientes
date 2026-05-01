@@ -208,14 +208,14 @@ export default function SimuladorCrescimentoClientes() {
     const progress = ((step - 1) / (STEP_LABELS.length - 1)) * 100;
 
     return (
-        <section id="simulador" data-testid="simulator-section" className="relative py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E2E8F0]">
-            <div className="max-w-5xl mx-auto px-4 md:px-8">
+        <section id="simulador" data-testid="simulator-section" className="relative py-24 md:py-28 bg-[#F8FAFC] border-y border-[#E2E8F0]">
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
                 <div className="max-w-2xl mx-auto text-center">
                     <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#2563EB] uppercase tracking-widest mb-4">
                         <BarChart3 className="w-3.5 h-3.5" strokeWidth={2.5} />
                         Simulador de crescimento
                     </div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0A0A0A] tracking-tighter-2 leading-[1.1]">
+                    <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#0A0A0A] tracking-tighter-2 leading-[1.1]">
                         Veja em 30 segundos quantos clientes pode estar a perder
                     </h2>
                     <p className="mt-4 text-base md:text-lg text-[#64748B] leading-relaxed">
@@ -223,7 +223,7 @@ export default function SimuladorCrescimentoClientes() {
                     </p>
                 </div>
 
-                <div className="mt-10 bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-6 md:p-8" data-testid="simulator-card">
+                <div className="mt-8 bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-10 md:p-12" data-testid="simulator-card">
                     <div className="mb-8">
                         <div className="flex items-center justify-between mb-3">
                             {STEP_LABELS.map((s, i) => {
@@ -294,8 +294,8 @@ export default function SimuladorCrescimentoClientes() {
                                 {error && <ErrorText text={error} />}
 
                                 <div className="mt-8 flex justify-end">
-                                    <button type="button" onClick={goToStep2} data-testid="sim-step1-next" className="btn btn-primary">
-                                        Ver análise
+                                    <button type="button" onClick={goToStep2} data-testid="sim-step1-next" className="btn btn-primary px-8 py-4 text-lg">
+                                        Ver quantos clientes pode ganhar
                                         <ArrowRight className="w-4 h-4" />
                                     </button>
                                 </div>
@@ -341,7 +341,7 @@ export default function SimuladorCrescimentoClientes() {
                                         <ArrowLeft className="w-4 h-4" />
                                         Voltar
                                     </button>
-                                    <button type="button" onClick={submit} disabled={submitting} data-testid="sim-submit" className="btn btn-primary">
+                                    <button type="button" onClick={submit} disabled={submitting} data-testid="sim-submit" className="btn btn-primary px-8 py-4 text-lg">
                                         {submitting ? (
                                             <>
                                                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -395,11 +395,11 @@ export default function SimuladorCrescimentoClientes() {
                                 </div>
 
                                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-                                    <button type="button" onClick={resetSimulator} data-testid="sim-reset" className="btn btn-ghost">
+                                    <button type="button" onClick={resetSimulator} data-testid="sim-reset" className="btn btn-ghost px-6 py-3 text-base">
                                         <ArrowLeft className="w-4 h-4" />
                                         Nova simulação
                                     </button>
-                                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" data-testid="sim-final-cta" className="btn btn-whatsapp">
+                                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" data-testid="sim-final-cta" className="btn btn-whatsapp px-6 py-3 text-base">
                                         <MessageCircle className="w-4 h-4" />
                                         Quero captar mais clientes no meu negócio
                                     </a>
@@ -417,7 +417,7 @@ function Input({ label, name, value, onChange, type = "text", placeholder, min, 
     return (
         <div>
             <label className="block text-xs font-medium text-[#475569] mb-1.5">{label}</label>
-            <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} min={min} data-testid={testid} className="w-full rounded-lg border border-[#E2E8F0] bg-white px-3.5 py-2.5 text-sm text-[#0A0A0A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors" />
+            <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} min={min} data-testid={testid} className="w-full rounded-lg border border-[#E2E8F0] bg-white px-5 py-3.5 text-base text-[#0A0A0A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors" />
         </div>
     );
 }
@@ -426,7 +426,7 @@ function Select({ label, name, value, onChange, options, testid }) {
     return (
         <div>
             <label className="block text-xs font-medium text-[#475569] mb-1.5">{label}</label>
-            <select name={name} value={value} onChange={onChange} data-testid={testid} className="w-full rounded-lg border border-[#E2E8F0] bg-white px-3.5 py-2.5 text-sm text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors">
+            <select name={name} value={value} onChange={onChange} data-testid={testid} className="w-full rounded-lg border border-[#E2E8F0] bg-white px-5 py-3.5 text-base text-[#0A0A0A] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors">
                 {options.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                 ))}

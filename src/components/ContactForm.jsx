@@ -194,7 +194,7 @@ export default function ContactForm() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.4, delay: 0.05 }}
-                        className="lg:col-span-3 bg-white rounded-2xl border border-[#E2E8F0] p-6 md:p-8 shadow-sm"
+                        className="lg:col-span-3 bg-white rounded-2xl border border-[#E2E8F0] p-8 md:p-10 shadow-sm"
                         data-testid="contact-form"
                     >
                         {!submitted && (
@@ -414,7 +414,7 @@ export default function ContactForm() {
                                     )}
 
                                     {step < 3 ? (
-                                        <button type="button" onClick={next} className="btn btn-primary">
+                                        <button type="button" onClick={next} className="btn btn-primary btn-lg px-8 py-4">
                                             Continuar
                                             <ArrowRight className="w-4 h-4" />
                                         </button>
@@ -451,7 +451,7 @@ export default function ContactForm() {
 function Field({ label, name, value, onChange, type = "text", placeholder }) {
     return (
         <div>
-            <label className="block text-xs font-medium text-[#475569] mb-1.5">
+            <label className="block text-sm font-medium text-[#475569] mb-1.5">
                 {label}
             </label>
 
@@ -461,7 +461,7 @@ function Field({ label, name, value, onChange, type = "text", placeholder }) {
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                className="w-full rounded-lg border border-[#E2E8F0] bg-white px-3.5 py-2.5 text-sm text-[#0A0A0A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors"
+                className="w-full rounded-lg border border-[#E2E8F0] bg-white px-4 py-3.5 text-base text-[#0A0A0A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-colors"
             />
         </div>
     );

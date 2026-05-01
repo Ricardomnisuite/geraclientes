@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Calculator } from "lucide-react";
 import { openWhatsApp } from "../lib/whatsapp";
 
 const STATS = [
@@ -12,7 +12,10 @@ export default function Hero() {
     const scrollTo = (id) => {
         const el = document.getElementById(id);
         if (el) {
-            window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: "smooth" });
+            window.scrollTo({
+                top: el.getBoundingClientRect().top + window.scrollY - 72,
+                behavior: "smooth",
+            });
         }
     };
 
@@ -20,9 +23,8 @@ export default function Hero() {
         <section
             id="hero"
             data-testid="hero-section"
-            className="relative pt-32 pb-16 md:pt-40 md:pb-20 overflow-hidden"
+            className="relative pt-24 pb-16 md:pt-32 md:pb-20 overflow-hidden"
         >
-            {/* Background */}
             <div className="absolute inset-0 bg-dot-grid opacity-60 mask-fade-b pointer-events-none" />
             <div className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#2563EB]/5 blur-3xl pointer-events-none" />
 
@@ -57,11 +59,10 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.12 }}
-                    className="mt-6 text-lg md:text-xl text-[#64748B] max-w-2xl mx-auto leading-relaxed"
+                    className="mt-6 text-lg md:text-xl text-[#64748B] max-w-3xl mx-auto leading-relaxed"
                     data-testid="hero-subheadline"
                 >
-                    Mais chamadas, mais mensagens e mais contactos — de pessoas que
-                    já procuram o que fazes.
+                    Existem pessoas a procurar o teu serviço hoje — e não estão a encontrar-te.
                 </motion.p>
 
                 <motion.div
@@ -79,18 +80,18 @@ export default function Hero() {
                         Verificar Disponibilidade
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
                     </button>
+
                     <button
                         type="button"
-                        onClick={() => scrollTo("resultados")}
+                        onClick={() => scrollTo("simulador")}
                         data-testid="hero-cta-secondary"
-                        className="btn btn-ghost btn-lg"
+                        className="btn btn-outline btn-lg hover:bg-[#2563EB]/10 hover:border-[#2563EB] hover:text-[#2563EB]"
                     >
-                        <Play className="w-4 h-4" />
-                        Ver Exemplos Reais
+                        <Calculator className="w-4 h-4" />
+                        Ver clientes que pode ganhar
                     </button>
                 </motion.div>
 
-                {/* Stats */}
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}

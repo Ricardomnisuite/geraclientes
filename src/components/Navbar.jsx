@@ -9,6 +9,9 @@ const NAV_ITEMS = [
     { label: "Website", href: "#website" },
     { label: "FAQ", href: "#faq" },
     { label: "Blog", href: "/blog", isRoute: true },
+
+    // 🔥 NOVO BOTÃO
+    { label: "Simulador", href: "#simulador" },
 ];
 
 export default function Navbar() {
@@ -25,13 +28,19 @@ export default function Navbar() {
     }, []);
 
     const handleAnchor = (e, href) => {
-        if (!onHome) return; // Let Link navigate to /
+        if (!onHome) return;
+
         if (href.startsWith("#")) {
             e.preventDefault();
             const el = document.querySelector(href);
+
             if (el) {
-                window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: "smooth" });
+                window.scrollTo({
+                    top: el.getBoundingClientRect().top + window.scrollY - 72,
+                    behavior: "smooth",
+                });
             }
+
             setOpen(false);
         }
     };
@@ -39,14 +48,15 @@ export default function Navbar() {
     return (
         <header
             data-testid="navbar"
-            className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-                scrolled
-                    ? "backdrop-blur-xl bg-white/75 border-b border-[#E2E8F0]"
-                    : "bg-transparent"
-            }`}
+            className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled
+                ? "backdrop-blur-xl bg-white/75 border-b border-[#E2E8F0]"
+                : "bg-transparent"
+                }`}
         >
             <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
-                <Link to="/" data-testid="navbar-logo" className="flex items-center gap-2 group">
+
+                {/* LOGO */}
+                <Link to="/" className="flex items-center gap-2 group">
                     <div className="w-8 h-8 rounded-lg bg-[#0A0A0A] flex items-center justify-center group-hover:scale-[1.04] transition-transform duration-200">
                         <Sparkles className="w-4 h-4 text-white" strokeWidth={2.5} />
                     </div>
@@ -55,14 +65,14 @@ export default function Navbar() {
                     </span>
                 </Link>
 
+                {/* DESKTOP NAV */}
                 <nav className="hidden md:flex items-center gap-1">
                     {NAV_ITEMS.map((item) =>
                         item.isRoute ? (
                             <Link
                                 key={item.label}
                                 to={item.href}
-                                data-testid={`nav-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                                className="px-3 py-2 text-sm font-medium text-[#334155] hover:text-[#0A0A0A] transition-colors duration-150"
+                                className="px-3 py-2 text-sm font-medium text-[#334155] hover:text-[#0A0A0A] transition-colors"
                             >
                                 {item.label}
                             </Link>
@@ -71,8 +81,7 @@ export default function Navbar() {
                                 key={item.label}
                                 href={item.href}
                                 onClick={(e) => handleAnchor(e, item.href)}
-                                data-testid={`nav-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                                className="px-3 py-2 text-sm font-medium text-[#334155] hover:text-[#0A0A0A] transition-colors duration-150"
+                                className="px-3 py-2 text-sm font-medium text-[#334155] hover:text-[#0A0A0A] transition-colors"
                             >
                                 {item.label}
                             </a>
@@ -80,8 +89,7 @@ export default function Navbar() {
                             <Link
                                 key={item.label}
                                 to={`/${item.href}`}
-                                data-testid={`nav-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                                className="px-3 py-2 text-sm font-medium text-[#334155] hover:text-[#0A0A0A] transition-colors duration-150"
+                                className="px-3 py-2 text-sm font-medium text-[#334155] hover:text-[#0A0A0A] transition-colors"
                             >
                                 {item.label}
                             </Link>
@@ -89,37 +97,34 @@ export default function Navbar() {
                     )}
                 </nav>
 
+                {/* CTA */}
                 <div className="hidden md:flex items-center gap-3">
                     <a
                         href="#contacto"
                         onClick={(e) => onHome && handleAnchor(e, "#contacto")}
-                        data-testid="navbar-cta-button"
                         className="btn btn-primary btn-sm"
                     >
                         Verificar Disponibilidade
                     </a>
                 </div>
 
+                {/* MOBILE BUTTON */}
                 <button
-                    type="button"
                     className="md:hidden p-2 text-[#0A0A0A]"
                     onClick={() => setOpen((v) => !v)}
-                    data-testid="navbar-mobile-toggle"
-                    aria-label="Menu"
                 >
                     {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </button>
             </div>
 
+            {/* MOBILE MENU */}
             <AnimatePresence>
                 {open && (
                     <motion.div
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        transition={{ duration: 0.18 }}
                         className="md:hidden border-t border-[#E2E8F0] bg-white"
-                        data-testid="navbar-mobile-panel"
                     >
                         <div className="px-4 py-4 flex flex-col gap-1">
                             {NAV_ITEMS.map((item) =>
@@ -129,7 +134,6 @@ export default function Navbar() {
                                         to={item.href}
                                         onClick={() => setOpen(false)}
                                         className="px-3 py-2.5 text-sm font-medium text-[#334155]"
-                                        data-testid={`mobile-nav-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
                                     >
                                         {item.label}
                                     </Link>
@@ -139,17 +143,16 @@ export default function Navbar() {
                                         href={onHome ? item.href : `/${item.href}`}
                                         onClick={(e) => onHome && handleAnchor(e, item.href)}
                                         className="px-3 py-2.5 text-sm font-medium text-[#334155]"
-                                        data-testid={`mobile-nav-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
                                     >
                                         {item.label}
                                     </a>
                                 )
                             )}
+
                             <a
                                 href={onHome ? "#contacto" : "/#contacto"}
                                 onClick={(e) => onHome && handleAnchor(e, "#contacto")}
                                 className="mt-2 btn btn-primary"
-                                data-testid="mobile-nav-cta"
                             >
                                 Verificar Disponibilidade
                             </a>

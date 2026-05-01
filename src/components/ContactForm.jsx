@@ -11,6 +11,7 @@ import {
     RotateCcw,
 } from "lucide-react";
 import { openWhatsApp } from "../lib/whatsapp";
+
 const SECTORS = [
     "Clínica Dentária",
     "Clínica Estética",
@@ -70,6 +71,8 @@ export default function ContactForm() {
     const back = () => setStep((s) => Math.max(1, s - 1));
 
     const onSubmit = async () => {
+        alert("SUBMIT DISPAROU");
+
         const err = validateStep(1) || validateStep(2);
         if (err) {
             toast.error(err);

@@ -105,8 +105,12 @@ export default function ContactForm() {
                 throw new Error(`API ERROR ${res.status}`);
             }
 
-            if (typeof window !== "undefined" && typeof window.gtag_report_conversion === "function") {
-                window.gtag_report_conversion();
+            if (typeof window !== "undefined" && typeof window.gtag === "function") {
+                window.gtag("event", "conversion", {
+                    send_to: "AW-18127989211/d9BgCMDY3qQcENvTjMRD",
+                    value: 1.0,
+                    currency: "EUR",
+                });
             }
 
             setSubmitted(true);

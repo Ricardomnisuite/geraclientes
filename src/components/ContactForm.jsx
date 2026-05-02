@@ -105,6 +105,10 @@ export default function ContactForm() {
                 throw new Error(`API ERROR ${res.status}`);
             }
 
+            if (typeof window !== "undefined" && typeof window.gtag_report_conversion === "function") {
+                window.gtag_report_conversion();
+            }
+
             setSubmitted(true);
 
             toast.success(
@@ -208,8 +212,8 @@ export default function ContactForm() {
                                             <div key={s.id} className="flex items-center gap-2">
                                                 <div
                                                     className={`w-6 h-6 rounded-full text-[11px] font-semibold flex items-center justify-center transition-all duration-200 ${isDone || isActive
-                                                            ? "bg-[#2563EB] text-white"
-                                                            : "bg-[#E2E8F0] text-[#94A3B8]"
+                                                        ? "bg-[#2563EB] text-white"
+                                                        : "bg-[#E2E8F0] text-[#94A3B8]"
                                                         }`}
                                                 >
                                                     {isDone ? (
